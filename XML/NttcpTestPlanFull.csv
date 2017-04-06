@@ -12,7 +12,7 @@ S.No.,Region,VMSize,StorageAccount (Classic),StorageAccount (ARM)
 11,East Asia,Standard_D14,konkacieastasia,konkacieastasiav2
 12,Brazil South,Standard_D4_v2,konkacibrazilsouth1,konkacibrazilsouth
 13,Australia Southeast,A7,knkaciaustraliasouthest,konkaciaustraliasouthest
-14,South India,Standard_F16,konkacisouthindia1,
+14,South India,Standard_F16,konkacisouthindia1,konkacisouthindiav2
 15,East US,Standard_DS13,konkacieastus,konkacieastusv2
 16,North Central US,A9,konkacinorthcentralus1,konkacinorthcentralus
 17,South Central US,A8,konkacisouthcentralus,
