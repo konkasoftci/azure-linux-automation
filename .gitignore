@@ -1,2 +1,8 @@
 .idea/*
-
+TestResults*
+tools*
+report*
+Reload*
+Azure_ICA_all_*
+start*
+.vscode/launch.json
