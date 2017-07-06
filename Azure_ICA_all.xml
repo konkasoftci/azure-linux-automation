@@ -5968,12 +5968,12 @@
 			<testName>E2E-WORDPRESS-SINGLE-VM-SETUP</testName>
 			<testScript>E2E-WORDPRESS-SETUP.py</testScript>
 			<testScriptps1>E2E-WORDPRESS-SETUP.ps1</testScriptps1>
-			<files>.\remote-scripts\Packages\wordpress.zip,.\remote-scripts\Packages\Wordpress.DDL,.\remote-scripts\E2E-WORDPRESS-SETUP.py,.\remote-scripts\azuremodules.py</files>
+			<files>.\remote-scripts\E2E-WORDPRESS-SETUP.py,.\remote-scripts\azuremodules.py,.\tools\packages\python-pexpect-3.1-1.1.noarch.rpm</files>
 			<setupType>E2ESingleVM</setupType>
 			<TestType></TestType>
 			<E2ESetupCmdLineArgument>singleVM_setup</E2ESetupCmdLineArgument>
 			<TestFeature></TestFeature>
-			<SupportedExecutionModes>AzureServiceManagement</SupportedExecutionModes>
+			<SupportedExecutionModes>AzureServiceManagement,AzureResourceManager</SupportedExecutionModes>
 			<TestID></TestID>
 			<Priority>P0</Priority>
 		</test>
@@ -5999,12 +5999,12 @@
 			<testName>E2E-WORDPRESS-FOUR-VM-SETUP</testName>
 			<testScript>E2E-WORDPRESS-SETUP.py</testScript>
 			<testScriptps1>E2E-WORDPRESS-SETUP.ps1</testScriptps1>
-			<files>.\remote-scripts\Packages\wordpress.zip,.\remote-scripts\Packages\Wordpress.DDL,.\remote-scripts\E2E-WORDPRESS-SETUP.py,.\remote-scripts\azuremodules.py</files>
+			<files>.\remote-scripts\E2E-WORDPRESS-SETUP.py,.\remote-scripts\azuremodules.py,.\tools\packages\python-pexpect-3.1-1.1.noarch.rpm</files>
 			<setupType>E2EFourVM</setupType>
 			<TestType></TestType>
 			<E2ESetupCmdLineArgument>loadbalancer_setup</E2ESetupCmdLineArgument>
 			<TestFeature></TestFeature>
-			<SupportedExecutionModes>AzureServiceManagement</SupportedExecutionModes>
+			<SupportedExecutionModes>AzureServiceManagement,AzureResourceManager</SupportedExecutionModes>
 			<TestID></TestID>
 			<Priority>P0</Priority>
 		</test>
