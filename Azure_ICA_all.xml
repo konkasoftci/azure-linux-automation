@@ -7512,12 +7512,13 @@
 			<test>
 				<Name>BVT-VERIFY-NO-ERROR-IN-LOGS</Name>
 			</test>
-			<test>
-				<Name>BVT-VERIFY-BASH-HISTORY</Name>
-			</test>
-			<test>
-				<Name>BVT-VERIFY-VHD-PREREQUISITES</Name>
-			</test>
+			<!--Commented for HVPEP-->
+			<!-- <test> -->
+				<!-- <Name>BVT-VERIFY-BASH-HISTORY</Name> -->
+			<!-- </test> -->
+			<!-- <test> -->
+				<!-- <Name>BVT-VERIFY-VHD-PREREQUISITES</Name> -->
+			<!-- </test> -->
 			<test>
 				<Name>BVT-WA-PROC-CHECK</Name>
 			</test>
@@ -7536,9 +7537,10 @@
 			<test>
 				<Name>BVT-ROOT-DEVICE-TIMEOUT-CHECK</Name>
 			</test>
-			<test>
-				<Name>BVT-IS-ROOT-PASSWORD-DELETED</Name>
-			</test>
+			<!--Commented for HVPEP-->
+			<!-- <test> -->
+				<!-- <Name>BVT-IS-ROOT-PASSWORD-DELETED</Name> -->
+			<!-- </test> -->
 			<test>
 				<Name>BVT-VERIFY-HOSTNAME</Name>
 			</test>
@@ -7560,9 +7562,10 @@
 			<test>
 				<Name>BVT-VERIFY-DISKSIZE</Name>
 			</test>
-			<test>
-				<Name>BVT-VERIFY-FIREWALL-STATUS</Name>
-			</test>
+			<!--Commented for HVPEP-->
+			<!-- <test> -->
+				<!-- <Name>BVT-VERIFY-FIREWALL-STATUS</Name> -->
+			<!-- </test> -->
 			<test>
 				<Name>BVT-LAST-CONSOLE-CHECK</Name>
 			</test>
