@@ -109,16 +109,6 @@ $DeploymentCount = $NumberOfSizes*5
             #set BaseOsVHD so that deployment will pick the VHD
             Set-Variable -Name BaseOsVHD -Value $VHDuri -Scope Global
 
-            #$Distros = @($xmlConfig.config.Azure.Deployment.Data.Distro)
-            #add OSVHD element to $xml so that deployment will pick the vhd 
-            #foreach ($distroname in $Distros)
-	        #{
-           	#	if ($distroname.Name -eq $Distro)
-		    #    {
-            #        $xmlConfig.config.Azure.Deployment.Data.Distro[$Distros.IndexOf($distroname)].OsVHD = $VHDuri.ToString() 
-		    #    }
-	        #}
-
             #Finally set customKernl and customLIS to null which are not required to be installed after deploying Virtual machine
             $customKernel = $null
             Set-Variable -Name customKernel -Value $customKernel -Scope Global
