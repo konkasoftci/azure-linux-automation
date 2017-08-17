@@ -7510,6 +7510,32 @@
 			<param>LATEST</param>
 			</TestParameters>
 			<Priority>P0</Priority>
+		</test>
+		<test>
+			<testName>DISK-HOT-ADD-PARALLEL</testName>
+			<testScript></testScript>
+			<testScriptps1>DiskHotAddRemove-Parallel.ps1</testScriptps1>
+			<setupType>A4</setupType>
+			<SupportedExecutionModes>AzureResourceManager</SupportedExecutionModes>
+			<SubtestValues></SubtestValues>
+			<files>.\remote-scripts\azuremodules.sh</files>
+			<TestParameters>
+				<param></param>
+			</TestParameters>
+			<Priority>P0</Priority>
+		</test>
+  		<test>
+			<testName>DISK-HOT-ADD-SERIAL</testName>
+			<testScript></testScript>
+			<testScriptps1>DiskHotAddRemove-Serial.ps1</testScriptps1>
+			<setupType>A4</setupType>
+			<SupportedExecutionModes>AzureResourceManager</SupportedExecutionModes>
+			<SubtestValues></SubtestValues>
+			<files>.\remote-scripts\azuremodules.sh</files>
+			<TestParameters>
+				<param></param>
+			</TestParameters>
+			<Priority>P0</Priority>
 		</test>			
 	</testsDefinition>
 
@@ -8608,5 +8634,14 @@
 				<Name>ICA-BUILD-CUSTOM-VM-CAPTURE-VHD-ARM-LATEST</Name>
 			</test>
 		</Cycle>
+		<Cycle>
+      		<cycleName>DISKHOTADD</cycleName>
+      		<test>
+        		<Name>DISK-HOT-ADD-PARALLEL</Name>
+      		</test>
+			<test>
+        		<Name>DISK-HOT-ADD-SERIAL</Name>
+      		</test>  
+    	</Cycle>
 	</testCycles>
 </config>
