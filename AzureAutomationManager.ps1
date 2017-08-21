@@ -44,8 +44,7 @@ $user = $xmlConfig.config.Azure.Deployment.Data.UserName
 $password = $xmlConfig.config.Azure.Deployment.Data.Password
 $sshKey = $xmlConfig.config.Azure.Deployment.Data.sshKey
 $sshPublickey = $xmlConfig.config.Azure.Deployment.Data.sshPublicKey
-$LinuxSSHCertificate = Import-Certificate -FilePath .\ssh\$sshPublickey -CertStoreLocation Cert:\CurrentUser\My
-$sshPublicKeyThumbprint = $LinuxSSHCertificate.Thumbprint
+
 Set-Variable -Name user -Value $user -Scope Global
 Set-Variable -Name password -Value $password -Scope Global
 Set-Variable -Name sshKey -Value $sshKey -Scope Global
@@ -143,8 +142,8 @@ try
     $testDir = $testResults + "\" + $fname + "-" + $testStartTime.ToString("yyyyMMdd-HHmmss") + "-$(Get-Random -Maximum 999 -Minimum 111)"
 
     mkdir $testDir -ErrorAction SilentlyContinue | out-null
-    Set-Content -Value "" -Path .\report\testSummary.html -Force | Out-Null
-    Set-Content -Value "" -Path .\report\AdditionalInfo.html -Force | Out-Null
+    Set-Content -Value "" -Path .\report\testSummary.html -Force -ErrorAction SilentlyContinue | Out-Null
+    Set-Content -Value "" -Path .\report\AdditionalInfo.html -Force -ErrorAction SilentlyContinue | Out-Null
 
     if ($logFilename)
     {
@@ -153,11 +152,11 @@ try
 
     $logFile = $testDir + "\" + $logfile
     Set-Variable -Name logfile -Value $logFile -Scope Global
-    Set-Content -Path .\report\lastLogDirectory.txt -Value $testDir
+    Set-Content -Path .\report\lastLogDirectory.txt -Value $testDir -ErrorAction SilentlyContinue
     Set-Variable -Name Distro -Value $Distro -Scope Global
     Set-Variable -Name onCloud -Value $onCloud -Scope Global
-    Set-Variable -Name xmlConfig -Value $xmlConfig -Scope Global
-	Set-Content -Path .\report\lastLogDirectory.txt -Value $testDir
+    Set-Variable -Name xmlConfig -Value $xmlConfig -Scope Global 
+	Set-Content -Path .\report\lastLogDirectory.txt -Value $testDir -ErrorAction SilentlyContinue
     Set-Variable -Name vnetIsAllConfigured -Value $false -Scope Global
     if($EconomyMode)
     {
@@ -197,6 +196,8 @@ try
     }
     else
     {
+        $LinuxSSHCertificate = Import-Certificate -FilePath .\ssh\$sshPublickey -CertStoreLocation Cert:\CurrentUser\My
+        $sshPublicKeyThumbprint = $LinuxSSHCertificate.Thumbprint
         Set-Variable -Name UseAzureResourceManager -Value $false -Scope Global
         LogMsg "Setting Azure Subscription ..."
 		$out = SetSubscription -subscriptionID $AzureSetup.SubscriptionID -subscriptionName $AzureSetup.SubscriptionName -certificateThumbprint $AzureSetup.CertificateThumbprint -managementEndpoint $AzureSetup.ManagementEndpoint -storageAccount $AzureSetup.StorageAccount -environment $AzureSetup.Environment
