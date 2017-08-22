@@ -8656,14 +8656,5 @@
 				<Name>ICA-BUILD-CUSTOM-VM-CAPTURE-VHD-ARM-LATEST</Name>
 			</test>
 		</Cycle>
-		<Cycle>
-      		<cycleName>DISKHOTADD</cycleName>
-      		<test>
-        		<Name>DISK-HOT-ADD-PARALLEL</Name>
-      		</test>
-			<test>
-        		<Name>DISK-HOT-ADD-SERIAL</Name>
-      		</test>  
-    	</Cycle>
 	</testCycles>
 </config>
