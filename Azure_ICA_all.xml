@@ -61,21 +61,22 @@
 			<Data>
 				<!-- You can add your own distro and Image names here -->
 				<Distro>
-					<Name>CK</Name>
+					<Name>ShortDistroName</Name>
 					<OsImage></OsImage>
 					<!-- <OsImage>b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-16_04-LTS-amd64-server-20160907.1-en-us-30GB</OsImage> -->
 					<ARMImage>
-						<Publisher>Canonical</Publisher>
+						<Publisher></Publisher>
 						<!-- <Publisher>Canonical</Publisher> -->
-						<Offer>UbuntuServer</Offer>
+						<Offer></Offer>
 						<!-- <Offer>UbuntuServer</Offer> -->
-						<Sku>16.04.0-LTS</Sku>
+						<Sku></Sku>
 						<!-- <Sku>16.04.0-LTS</Sku> -->
-						<Version>latest</Version>
+						<Version></Version>
 						<!-- <Version>latest</Version> -->
 					</ARMImage>
 					<OsVHD></OsVHD>
 					<!-- <OsVHD>VHD_NAME.vhd</OsVHD> -->
+					<!-- <OsVHD>http://storageaccouunt.blob.core.windows.net/vhds/VHD_NAME.vhd</OsVHD> -->
 				</Distro>				
 				<Distro>
 					<Name>SSU1510P</Name>
@@ -4919,6 +4920,32 @@
 	      <TestID>AzureBVT_029</TestID>
 	    </test>
 		<test>
+	      <testName>BVT-CAPTURE-VHD</testName>
+	      <testScript></testScript>
+	      <testScriptPs1>BVT-CAPTURE-VHD.ps1</testScriptPs1>
+	      <files></files>
+	      <setupType>BVTDeployment</setupType>
+	      <TestType>
+	      </TestType>
+	      <TestFeature>
+	      </TestFeature>
+	      <SupportedExecutionModes>AzureResourceManager</SupportedExecutionModes>
+	      <TestID>AzureBVT_000</TestID>
+	    </test>
+		<test>
+	    <testName>BVT-DELETE-VHD</testName>
+	    <testScript></testScript>
+	    <testScriptPs1>BVT-CAPTURE-VHD.ps1</testScriptPs1>
+	    <files></files>
+	    <setupType>BVTDeployment</setupType>
+	    <TestType>
+	    </TestType>
+	    <TestFeature>
+	    </TestFeature>
+	    <SupportedExecutionModes>AzureResourceManager</SupportedExecutionModes>
+	    <TestID>AzureBVT_100</TestID>
+		</test>
+		<test>
 			<testName>ICA-VERIFY-RDMA</testName>
 			<testScript>ICA-VERIFY-RDMA.py</testScript>
 			<testScriptPs1>ICA-VERIFY-RDMA.ps1</testScriptPs1>
@@ -7081,7 +7108,7 @@
 				<param>numjobs=1</param>
 				<param>ioruntime=300</param>
 				<param>maxIO=4</param>
-				<param>fileSize=134G</param>
+				<param>fileSize=1023G</param>
 			</TestParameters>
 			<Priority>P0</Priority>
 		</test>		
@@ -7226,7 +7253,20 @@
 			<SupportedExecutionModes>AzureServiceManagement,AzureResourceManager</SupportedExecutionModes>
 			<SubtestValues>SOME,TEXTS,NEEDS,TO,BE,PRESENT,HERE,FOR,PRINTING,TEST,SUMMARY</SubtestValues>
 			<Priority>P0</Priority>
-		</test>
+		</test>	
+		<test>
+			<testName>VERIFY-DISK-HOT-ADDREMOVE</testName>
+			<testScript></testScript>
+			<testScriptps1>DiskAddRemove.ps1</testScriptps1>
+			<setupType>A1</setupType>
+			<SupportedExecutionModes>AzureResourceManager</SupportedExecutionModes>
+			<SubtestValues></SubtestValues>
+			<files>.\remote-scripts\azuremodules.sh</files>
+			<TestParameters>
+				<param></param>
+			</TestParameters>
+			<Priority>P0</Priority>
+		</test>		
 		<!-- LIS BUILD TEST -->
 		<test>
 			<!-- Install Latest LIS -> reboot and Verify it Installed Successfully with out any errors and warnings. -->
@@ -7470,6 +7510,45 @@
 			<param>LATEST</param>
 			</TestParameters>
 			<Priority>P0</Priority>
+		</test>
+		<test>
+			<testName>BVT-HOT-VM-RESIZE</testName>
+			<testScript></testScript>
+			<testScriptps1>HotReSize-VM.ps1</testScriptps1>
+			<setupType>A4</setupType>
+			<SupportedExecutionModes>AzureResourceManager</SupportedExecutionModes>
+			<SubtestValues></SubtestValues>
+			<files>.\remote-scripts\azuremodules.sh</files>
+			<TestParameters>
+				<param></param>
+			</TestParameters>
+			<Priority>P0</Priority>
+		</test>
+		<test>
+			<testName>BVT-HOT-ADD-DISK-PARALLEL</testName>
+			<testScript></testScript>
+			<testScriptps1>DiskHotAddRemove-Parallel.ps1</testScriptps1>
+			<setupType>A4</setupType>
+			<SupportedExecutionModes>AzureResourceManager</SupportedExecutionModes>
+			<SubtestValues></SubtestValues>
+			<files>.\remote-scripts\azuremodules.sh</files>
+			<TestParameters>
+				<param></param>
+			</TestParameters>
+			<Priority>P0</Priority>
+		</test>
+		<test>
+			<testName>BVT-HOT-ADD-DISK-SERIAL</testName>
+			<testScript></testScript>
+			<testScriptps1>DiskHotAddRemove-Serial.ps1</testScriptps1>
+			<setupType>A4</setupType>
+			<SupportedExecutionModes>AzureResourceManager</SupportedExecutionModes>
+			<SubtestValues></SubtestValues>
+			<files>.\remote-scripts\azuremodules.sh</files>
+			<TestParameters>
+				<param></param>
+			</TestParameters>
+			<Priority>P0</Priority>
 		</test>			
 	</testsDefinition>
 
@@ -7509,6 +7588,10 @@
 		<!-- BVT tests -->
 		<Cycle>
 			<cycleName>BVT</cycleName>
+			<!-- Do not delete BVT-CAPTURE-VHD test. This should always be the first test -->
+			<test>
+				<Name>BVT-CAPTURE-VHD</Name>
+			</test>
 			<test>
 				<Name>BVT-VERIFY-NO-ERROR-IN-LOGS</Name>
 			</test>
@@ -7584,8 +7667,44 @@
 			<test>
 				<Name>BVT-VERIFY-SHUTDOWN</Name>
 			</test>
+			<!-- Do not delete BVT-DELETE-VHD test. This should always be the last test -->
+			<test>
+				<Name>BVT-DELETE-VHD</Name>
+			</test>
 		</Cycle>
-
+		<Cycle>
+			<cycleName>BVTMK</cycleName>
+			<test>
+				<Name>BVT-VERIFY-NO-ERROR-IN-LOGS</Name>
+			</test>
+			<test>
+				<Name>BVT-VERIFY-VHD-PREREQUISITES</Name>
+			</test>
+			<test>
+				<Name>BVT-WA-PROC-CHECK</Name>
+			</test>
+			<test>
+				<Name>BVT-WA-VER-CHECK</Name>
+			</test>
+			<test>
+				<Name>BVT-SWAP-CHECK</Name>
+			</test>
+			<test>
+				<Name>BVT-VERIFY-RESTART</Name>
+			</test>
+			<test>
+				<Name>BVT-VERIFY-SHUTDOWN</Name>
+			</test>
+			<test>
+				<Name>BVT-HOT-VM-RESIZE</Name>
+			</test>
+			<test>
+				<Name>BVT-HOT-ADD-DISK-PARALLEL</Name>
+			</test>
+			<test>
+				<Name>BVT-HOT-ADD-DISK-SERIAL</Name>
+			</test>
+		</Cycle>
 		<!-- Network Outbound Access tests -->
 		<Cycle>
 			<cycleName>OutboundAccess</cycleName>
@@ -8404,9 +8523,6 @@
 				<Name>ICA-PERF-FIO-TEST-4K</Name>
 			</test>
 			<test>
-				<Name>ICA-PERF-FIO-TEST-8K</Name>
-			</test>
-			<test>
 				<Name>ICA-PERF-FIO-TEST-1024K</Name>
 			</test>			
 		</Cycle>
@@ -8490,6 +8606,12 @@
 			</test>
 		</Cycle>
 		<Cycle>
+			<cycleName>DISKHOTADDREMOVE</cycleName>
+			<test>
+				<Name>VERIFY-DISK-HOT-ADDREMOVE</Name>
+			</test>
+		</Cycle>
+		<Cycle>
 			<cycleName>LTP-BASIC</cycleName>
 			<test>
 				<Name>ICA-LTP-BASIC-TEST</Name>
@@ -8534,6 +8656,5 @@
 				<Name>ICA-BUILD-CUSTOM-VM-CAPTURE-VHD-ARM-LATEST</Name>
 			</test>
 		</Cycle>
-		
 	</testCycles>
 </config>

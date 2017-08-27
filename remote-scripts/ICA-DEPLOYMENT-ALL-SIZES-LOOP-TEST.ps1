@@ -58,7 +58,7 @@ else
 }
 LogMsg "test VM sizes: $VMSizes"
 $NumberOfSizes = $VMSizes.Count
-$DeploymentCount = $NumberOfSizes*5
+$DeploymentCount = $NumberOfSizes*1
 
 #Test Starts Here..
     try
@@ -106,15 +106,8 @@ $DeploymentCount = $NumberOfSizes*5
             }
             #get the VHD file name from the VHD uri
             $VHDuri = Split-Path $VHDuri -Leaf
-            $Distros = @($xmlConfig.config.Azure.Deployment.Data.Distro)
-            #add OSVHD element to $xml so that deployment will pick the vhd 
-            foreach ($distroname in $Distros)
-	        {
-           		if ($distroname.Name -eq $Distro)
-		        {
-                    $xmlConfig.config.Azure.Deployment.Data.Distro[$Distros.IndexOf($distroname)].OsVHD = $VHDuri.ToString() 
-		        }
-	        }
+            #set BaseOsVHD so that deployment will pick the VHD
+            Set-Variable -Name BaseOsVHD -Value $VHDuri -Scope Global
 
             #Finally set customKernl and customLIS to null which are not required to be installed after deploying Virtual machine
             $customKernel = $null
@@ -129,6 +122,7 @@ $DeploymentCount = $NumberOfSizes*5
             $deployedResourceGroupName = $null
             $DeploymentStatistics = CreateDeploymentResultObject
             #Create A VM here and Wait for the VM to come up.
+            LogMsg "Current Progress : Success : $successCount, Fail : $failCount, Remaining : $($DeploymentCount - $successCount - $failCount)"
             LogMsg "ATTEMPT : $count/$DeploymentCount : Deploying $($VMSizes[$VMSizeNumber]) VM.."
             Set-Variable -Name OverrideVMSize -Value $($VMSizes[$VMSizeNumber]) -Scope Global -Force
             $xmlConfig.config.Azure.Deployment.SingleVM.HostedService.Tag = $($VMSizes[$VMSizeNumber]).Replace("_","-")
@@ -152,14 +146,23 @@ $DeploymentCount = $NumberOfSizes*5
             {
                 if ( $UseAzureResourceManager )
                 {
+                        LogMsg "ATTEMPT : $count/$DeploymentCount : Deploying $($VMSizes[$VMSizeNumber]) VM.. SUCCESS"
+                        LogMsg "deployment Time = $($DeploymentStatistics.DeploymentTime)"
                         #Added restart check for the deployment
                         $isRestarted = RestartAllDeployments -allVMData $allVMData
                         if($isRestarted)
                         {
                             $successCount += 1
-                            LogMsg "ATTEMPT : $count/$DeploymentCount : Deploying $($VMSizes[$VMSizeNumber]) VM.. SUCCESS"
+                            LogMsg "ATTEMPT : $count/$DeploymentCount : Reboot $($VMSizes[$VMSizeNumber]) VM.. SUCCESS"
                             LogMsg "deployment Time = $($DeploymentStatistics.DeploymentTime)"
                             $deployResult = "PASS"
+                        }
+                        else 
+                        {
+                            $hash = @{}
+                            $hash.Add($preserveKeyword,"yes")
+                            $hash.Add("testName","$($currentTestData.testName)")
+                            $out = Set-AzureRmResourceGroup -Name $deployedServiceName -Tag $hash
                         }
                 }
                 else
