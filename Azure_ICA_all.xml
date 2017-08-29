@@ -7510,6 +7510,45 @@
 			<param>LATEST</param>
 			</TestParameters>
 			<Priority>P0</Priority>
+		</test>
+		<test>
+			<testName>BVT-HOT-VM-RESIZE</testName>
+			<testScript></testScript>
+			<testScriptps1>HotReSize-VM.ps1</testScriptps1>
+			<setupType>A4</setupType>
+			<SupportedExecutionModes>AzureResourceManager</SupportedExecutionModes>
+			<SubtestValues></SubtestValues>
+			<files>.\remote-scripts\azuremodules.sh</files>
+			<TestParameters>
+				<param></param>
+			</TestParameters>
+			<Priority>P0</Priority>
+		</test>
+		<test>
+			<testName>BVT-HOT-ADD-DISK-PARALLEL</testName>
+			<testScript></testScript>
+			<testScriptps1>DiskHotAddRemove-Parallel.ps1</testScriptps1>
+			<setupType>A4</setupType>
+			<SupportedExecutionModes>AzureResourceManager</SupportedExecutionModes>
+			<SubtestValues></SubtestValues>
+			<files>.\remote-scripts\azuremodules.sh</files>
+			<TestParameters>
+				<param></param>
+			</TestParameters>
+			<Priority>P0</Priority>
+		</test>
+		<test>
+			<testName>BVT-HOT-ADD-DISK-SERIAL</testName>
+			<testScript></testScript>
+			<testScriptps1>DiskHotAddRemove-Serial.ps1</testScriptps1>
+			<setupType>A4</setupType>
+			<SupportedExecutionModes>AzureResourceManager</SupportedExecutionModes>
+			<SubtestValues></SubtestValues>
+			<files>.\remote-scripts\azuremodules.sh</files>
+			<TestParameters>
+				<param></param>
+			</TestParameters>
+			<Priority>P0</Priority>
 		</test>			
 	</testsDefinition>
 
@@ -7655,6 +7694,15 @@
 			</test>
 			<test>
 				<Name>BVT-VERIFY-SHUTDOWN</Name>
+			</test>
+			<test>
+				<Name>BVT-HOT-VM-RESIZE</Name>
+			</test>
+			<test>
+				<Name>BVT-HOT-ADD-DISK-PARALLEL</Name>
+			</test>
+			<test>
+				<Name>BVT-HOT-ADD-DISK-SERIAL</Name>
 			</test>
 		</Cycle>
 		<!-- Network Outbound Access tests -->
