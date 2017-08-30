@@ -60,7 +60,7 @@ Function TrimSetup($VMObject, $PrevTestStatus, $metaData, $trimParam, $ISAbortIg
 			$basic_VM_cmd_info_status = RunLinuxCmd -username $VMObject.username -password $VMObject.password -ip $VMObject.VIP -port $VMObject.SSHPort -command $BasicInfoCmd -runAsSudo 
 			Add-Content -Value $basic_VM_cmd_info_status -Path "$($VMObject.logDir)\basic_VM_info_status.txt"
 		}
-		$TrimSetupConsole = RunLinuxCmd -username $VMObject.username -password $VMObject.password -ip $VMObject.VIP -port $VMObject.SSHPort -command "bash auto_rdos_XStoreTrim_setup.sh" -runAsSudo -runMaxAllowedTime 1200 
+		$TrimSetupConsole = RunLinuxCmd -username $VMObject.username -password $VMObject.password -ip $VMObject.VIP -port $VMObject.SSHPort -command "bash auto_rdos_XStoreTrim_setup.sh $VMObject.username" -runAsSudo -runMaxAllowedTime 1200 
 		Set-Content -Value $TrimSetupConsole -Path "$($VMObject.logDir)\TrimSetupConsoleOutput.txt"
 		$TrimSetupStatus = RunLinuxCmd -username $VMObject.username -password $VMObject.password -ip $VMObject.VIP -port $VMObject.SSHPort -command "cat /home/$user/state.txt" -runAsSudo 
 		if (($TrimSetupStatus -eq "TestCompleted") -or ($TrimSetupConsole -imatch "Updating test case state to completed"))
@@ -106,7 +106,7 @@ Function TrimTest($VMObject, $PrevTestStatus, $metaData, $trimParam, $ISAbortIgn
 			$basic_VM_cmd_info_status = RunLinuxCmd -username $VMObject.username -password $VMObject.password -ip $VMObject.VIP -port $VMObject.SSHPort -command $BasicInfoCmd -runAsSudo -ignoreLinuxExitCode
 			Add-Content -Value $basic_VM_cmd_info_status -Path "$($VMObject.logDir)\basic_VM_info_status.txt"
 		}
-		$testJob = RunLinuxCmd -username $VMObject.username -password $VMObject.password -ip $VMObject.VIP -port $VMObject.SSHPort -command "bash auto_rdos_XStoreTrim.sh >> TrimTestConsoleOutput.txt" -runAsSudo -RunInBackground
+		$testJob = RunLinuxCmd -username $VMObject.username -password $VMObject.password -ip $VMObject.VIP -port $VMObject.SSHPort -command "bash auto_rdos_XStoreTrim.sh $VMObject.username >> TrimTestConsoleOutput.txt" -runAsSudo -RunInBackground
 		#region MONITOR TEST
 		while ( (Get-Job -Id $testJob).State -eq "Running" )
 		{
@@ -120,7 +120,7 @@ Function TrimTest($VMObject, $PrevTestStatus, $metaData, $trimParam, $ISAbortIgn
 		
 		$testResult = GetActivePages -VMObject $VMObject -PrevTestStatus $PrevTestResult  -metaData $metaData -trimParam $trimParam -StorageAccountName $StorageAccountName -StoragePrimaryKey $StoragePrimaryKey -vhdUrl $vhdUrl
 		
-		$testJob = RunLinuxCmd -username $VMObject.username -password $VMObject.password -ip $VMObject.VIP -port $VMObject.SSHPort -command "bash auto_rdos_XStoreTrimFinal.sh >> TrimTestConsoleOutput.txt" -runAsSudo -RunInBackground
+		$testJob = RunLinuxCmd -username $VMObject.username -password $VMObject.password -ip $VMObject.VIP -port $VMObject.SSHPort -command "bash auto_rdos_XStoreTrimFinal.sh $VMObject.username >> TrimTestConsoleOutput.txt" -runAsSudo -RunInBackground
 		#region MONITOR TEST
 		while ( (Get-Job -Id $testJob).State -eq "Running" )
 		{

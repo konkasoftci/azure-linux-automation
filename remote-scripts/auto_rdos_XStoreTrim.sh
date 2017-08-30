@@ -25,7 +25,10 @@ ICA_TESTCOMPLETED="TestCompleted"  # The test completed successfully
 ICA_TESTABORTED="TestAborted"      # Error during setup of test
 ICA_TESTFAILED="TestFailed"        # Error during running of test
 
+username=$1
 CONSTANTS_FILE="constants.sh"
+StateFile="/home/$username/state.txt"
+SummaryFile="/home/$username/summary.log"
 
 LogMsg()
 {
@@ -34,7 +37,7 @@ LogMsg()
 
 UpdateTestState()
 {
-    echo $1 > ~/state.txt
+    echo $1 > $StateFile
 }
 
 #
@@ -54,9 +57,9 @@ else
     echo "Warn : no ${CONSTANTS_FILE} found"
 fi
 
-if [ -e ~/summary.log ]; then
+if [ -e $SummaryFile ]; then
     LogMsg "Cleaning up previous copies of summary.log"
-    rm -f ~/summary.log
+    rm -f $SummaryFile
 fi
 
 # 
@@ -69,7 +72,7 @@ LogMsg "Creating 5GB test file in /mnt/data"
 dd if=/dev/zero of=testfile.txt bs=5G count=1
 if [ $? -ne 0 ]; then
     LogMsg "Error in creating test file.."
-    echo "Creating test file: Failed" >> ~/summary.log
+    echo "Creating test file: Failed" >> $SummaryFile
     UpdateTestState $ICA_TESTFAILED
     exit 80
 fi

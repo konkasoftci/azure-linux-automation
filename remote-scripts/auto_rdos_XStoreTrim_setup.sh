@@ -25,7 +25,10 @@ ICA_TESTCOMPLETED="TestCompleted"  # The test completed successfully
 ICA_TESTABORTED="TestAborted"      # Error during setup of test
 ICA_TESTFAILED="TestFailed"        # Error during running of test
 
+username=$1
 CONSTANTS_FILE="constants.sh"
+StateFile="/home/$username/state.txt"
+SummaryFile="/home/$username/summary.log"
 
 LogMsg()
 {
@@ -34,7 +37,8 @@ LogMsg()
 
 UpdateTestState()
 {
-    echo $1 > ~/state.txt
+    #echo $1 > ~/state.txt
+	echo $1 > $StateFile
 }
 
 SetValue()
@@ -64,16 +68,16 @@ else
     echo "Warn : no ${CONSTANTS_FILE} found"
 fi
 
-if [ -e ~/summary.log ]; then
+if [ -e $SummaryFile ]; then
     LogMsg "Cleaning up previous copies of summary.log"
-    rm -f ~/summary.log
+    rm -f $SummaryFile
 fi
 
 #DATA_DISK=sdb
 DATA_DISK=$DATA_DISK
 if ! fdisk -l | grep "Disk /dev/$DATA_DISK"; then
     LogMsg "The /dev/$DATA_DISK not found"
-    echo "The /dev/$DATA_DISK not found" >> ~/summary.log
+    echo "The /dev/$DATA_DISK not found" >> $SummaryFile
     LogMsg "aborting the test."
     UpdateTestState $ICA_TESTABORTED
     exit 30
@@ -82,7 +86,7 @@ fi
 SetValue /sys/module/scsi_mod/parameters/scsi_logging_level 63
 SetValue /sys/block/$DATA_DISK/device/timeout 180
 
-echo "Test data disk : /dev/$DATA_DISK" >> ~/summary.log
+echo "Test data disk : /dev/$DATA_DISK" >> $SummaryFile
 DATA_PARTITION=/dev/${DATA_DISK}1
 
 # Create data partition
@@ -91,7 +95,7 @@ df -hT | grep $DATA_PARTITION && umount $DATA_PARTITION
 (echo n; echo p; echo 1; echo; echo; echo w) | fdisk /dev/$DATA_DISK
 if [ $? -ne 0 ]; then
     LogMsg "Error in creating data partition.."
-    echo "Creating data partition : Failed" >> ~/summary.log
+    echo "Creating data partition : Failed" >> $SummaryFile
     UpdateTestState $ICA_TESTFAILED
     exit 80
 fi
@@ -123,7 +127,7 @@ else
 fi
 if [ $? -ne 0 ]; then
     LogMsg "Error in creating file system.."
-    echo "Creating file system : Failed" >> ~/summary.log
+    echo "Creating file system : Failed" >> $SummaryFile
     UpdateTestState $ICA_TESTFAILED
     exit 80
 fi
@@ -139,7 +143,7 @@ if [ $? -eq 0 ]; then
     LogMsg "Drive mounted successfully..."    
 else
     LogMsg "Error in mounting drive..."
-    echo "Drive mount : Failed" >> ~/summary.log
+    echo "Drive mount : Failed" >> $SummaryFile
     UpdateTestState $ICA_TESTFAILED
     exit 70
 fi

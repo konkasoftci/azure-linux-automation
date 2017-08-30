@@ -25,8 +25,11 @@ ICA_TESTCOMPLETED="TestCompleted"  # The test completed successfully
 ICA_TESTABORTED="TestAborted"      # Error during setup of test
 ICA_TESTFAILED="TestFailed"        # Error during running of test
 
+username=$1
 CONSTANTS_FILE="constants.sh"
-
+StateFile="/home/$username/state.txt"
+SummaryFile="/home/$username/summary.log"
+s
 LogMsg()
 {
     echo `date "+%a %b %d %T %Y"` : ${1}    # To add the timestamp to the log file
@@ -34,7 +37,7 @@ LogMsg()
 
 UpdateTestState()
 {
-    echo $1 > ~/state.txt
+    echo $1 > $StateFile
 }
 
 #
@@ -54,9 +57,9 @@ else
     echo "Warn : no ${CONSTANTS_FILE} found"
 fi
 
-if [ -e ~/summary.log ]; then
+if [ -e $SummaryFile ]; then
     LogMsg "Cleaning up previous copies of summary.log"
-    rm -f ~/summary.log
+    rm -f $SummaryFile
 fi
 
 # 
@@ -70,10 +73,10 @@ LogMsg "Deleting 5GB test file in /mnt/data"
 rm -f testfile.txt
 if [[ $? -eq 0 ]]; then
     LogMsg "Test file is deleted successfully.."
-    echo "Test file is deleted successfully.." >> ~/summary.log
+    echo "Test file is deleted successfully.." >> $SummaryFile
 else
     LogMsg "Error in deleting test file.."
-    echo "Deleting test file: Failed" >> ~/summary.log
+    echo "Deleting test file: Failed" >> $SummaryFile
     UpdateTestState $ICA_TESTFAILED
     exit 80
 fi
