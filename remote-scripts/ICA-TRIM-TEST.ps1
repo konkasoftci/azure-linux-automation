@@ -106,8 +106,31 @@ Function TrimTest($VMObject, $PrevTestStatus, $metaData, $trimParam, $ISAbortIgn
 			$basic_VM_cmd_info_status = RunLinuxCmd -username $VMObject.username -password $VMObject.password -ip $VMObject.VIP -port $VMObject.SSHPort -command $BasicInfoCmd -runAsSudo -ignoreLinuxExitCode
 			Add-Content -Value $basic_VM_cmd_info_status -Path "$($VMObject.logDir)\basic_VM_info_status.txt"
 		}
-		$TrimTestConsole = RunLinuxCmd -username $VMObject.username -password $VMObject.password -ip $VMObject.VIP -port $VMObject.SSHPort -command "bash auto_rdos_XStoreTrim.sh" -runAsSudo -runMaxAllowedTime 2000 
+		$testJob = RunLinuxCmd -username $VMObject.username -password $VMObject.password -ip $VMObject.VIP -port $VMObject.SSHPort -command "bash auto_rdos_XStoreTrim.sh >> TrimTestConsoleOutput.txt" -runAsSudo -RunInBackground
+		#region MONITOR TEST
+		while ( (Get-Job -Id $testJob).State -eq "Running" )
+		{
+			$currentStatus = RunLinuxCmd -ip $VMObject.VIP -port $VMObject.SSHPort -username $VMObject.username -password $VMObject.password -command "tail -2 TrimTestConsoleOutput.txt"
+			LogMsg "Current Test Staus : $currentStatus"
+			WaitFor -seconds 30
+		}
+		
+		$TrimTestConsole = RunLinuxCmd -username $VMObject.username -password $VMObject.password -ip $VMObject.VIP -port $VMObject.SSHPort -command "cat TrimTestConsoleOutput.txt" -runAsSudo
 		Set-Content -Value $TrimTestConsole -Path "$($VMObject.logDir)\TrimTestConsoleOutput.txt"
+		
+		$testResult = GetActivePages -VMObject $VMObject -PrevTestStatus $PrevTestResult  -metaData $metaData -trimParam $trimParam -StorageAccountName $StorageAccountName -StoragePrimaryKey $StoragePrimaryKey -vhdUrl $vhdUrl
+		
+		$testJob = RunLinuxCmd -username $VMObject.username -password $VMObject.password -ip $VMObject.VIP -port $VMObject.SSHPort -command "bash auto_rdos_XStoreTrimFinal.sh >> TrimTestConsoleOutput.txt" -runAsSudo -RunInBackground
+		#region MONITOR TEST
+		while ( (Get-Job -Id $testJob).State -eq "Running" )
+		{
+			$currentStatus = RunLinuxCmd -ip $VMObject.VIP -port $VMObject.SSHPort -username $VMObject.username -password $VMObject.password -command "tail -2 TrimTestConsoleOutput.txt"
+			LogMsg "Current Test Staus : $currentStatus"
+			WaitFor -seconds 30
+		}
+		$TrimTestConsole = RunLinuxCmd -username $VMObject.username -password $VMObject.password -ip $VMObject.VIP -port $VMObject.SSHPort -command "cat TrimTestConsoleOutput.txt" -runAsSudo
+		Add-Content -Value $TrimTestConsole -Path "$($VMObject.logDir)\TrimTestConsoleOutput.txt"
+		
 		$TestStatus = RunLinuxCmd -username $VMObject.username -password $VMObject.password -ip $VMObject.VIP -port $VMObject.SSHPort -command "ls /home/$user | grep state.txt" -runAsSudo
 		if ($TestStatus)
 		{
@@ -249,7 +272,10 @@ $ActivePageValueBeforeTrim = ""
 $ActivePageValueAfterTrim = ""
 Set-Variable -Name ActivePageValueBeforeTrim -Value $ActivePageValueBeforeTrim -Scope Global
 Set-Variable -Name ActivePageValueAfterTrim -Value $ActivePageValueAfterTrim -Scope Global
-
+Set-Variable -Name StorageAccountName -Value $StorageAccountName -Scope Global
+Set-Variable -Name StoragePrimaryKey -Value $StoragePrimaryKey -Scope Global
+$vhdUrl = ""
+Set-Variable -Name vhdUrl -Value $vhdUrl -Scope Global
 $result = ""
 $testResult = ""
 $resultArr = @()
@@ -301,7 +327,7 @@ if($isDeployed)
 			}
 		}
 		#endregion
-		
+		$out = RemoteCopy -uploadTo $VMObject.VIP -port $VMObject.SSHPort -files $currentTestData.files -username $VMObject.username -password $VMObject.password -upload
 		#region to generating constatnt.sh
 		LogMsg "Generating constansts.sh ..."
 		$constantsFile = ".\$LogDir\$trimParam\constants.sh"
@@ -315,8 +341,8 @@ if($isDeployed)
 		LogMsg "constanst.sh created successfully..."
 		LogMsg (Get-Content -Path $constantsFile)
 		#endregion
+		$out = RemoteCopy -uploadTo $VMObject.VIP -port $VMObject.SSHPort -files $constantsFile -username $VMObject.username -password $VMObject.password -upload
 		
-		$out = RemoteCopy -uploadTo $VMObject.VIP -port $VMObject.SSHPort -files ".\$constantsFile,.\remote-scripts\auto_rdos_XStoreTrim_setup.sh,.\remote-scripts\auto_rdos_XStoreTrim.sh" -username $VMObject.username -password $VMObject.password -upload
 		
 		foreach($TestID in $SubtestValues)
 		{
@@ -345,10 +371,12 @@ if($isDeployed)
 					}
 				"TestID3" #Trim Test
 					{
-						$metaData = "Pass3 - $diskType Disk Trim Test"
+						$metaData = "Pass3 - $diskType Disk ActivePages on Trim Test"
 						mkdir "$LogDir\$trimParam\$metaData" -Force | Out-Null
 						$VMObject.LogDir = "$LogDir\$trimParam\$metaData"
-						$testResult = TrimTest -VMObject $VMObject -PrevTestStatus $PrevTestResult  -metaData $metaData	-trimParam $trimParam			
+						$testResult = TrimTest -VMObject $VMObject -PrevTestStatus $PrevTestResult  -metaData $metaData	-trimParam $trimParam
+						$ActivePageValueOnTrim = ParseLog -log "$($VMObject.logDir)\ActivePages-$metaData.txt"
+						$metaData = "$metaData : $ActivePageValueOnTrim "						
 					}
 				"TestID4" #Get ActivePages After Trim test
 					{

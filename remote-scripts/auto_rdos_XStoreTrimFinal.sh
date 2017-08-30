@@ -60,24 +60,27 @@ if [ -e ~/summary.log ]; then
 fi
 
 # 
-# Create and delete testfile for Trim test
+# Verify test file and delete testfile for Trim test
 #
-LogMsg "Running TRIM test on /mnt/data to Create 5Gb TEST FILE"
+LogMsg "Running TRIM test on /mnt/data to Verify created TEST FILE and delete"
 cd /mnt/data;
+ls -l
 df -hT | grep /mnt/data
-LogMsg "Creating 5GB test file in /mnt/data"
-dd if=/dev/zero of=testfile.txt bs=5G count=1
-if [ $? -ne 0 ]; then
-    LogMsg "Error in creating test file.."
-    echo "Creating test file: Failed" >> ~/summary.log
+LogMsg "Deleting 5GB test file in /mnt/data"
+rm -f testfile.txt
+if [[ $? -eq 0 ]]; then
+    LogMsg "Test file is deleted successfully.."
+    echo "Test file is deleted successfully.." >> ~/summary.log
+else
+    LogMsg "Error in deleting test file.."
+    echo "Deleting test file: Failed" >> ~/summary.log
     UpdateTestState $ICA_TESTFAILED
     exit 80
 fi
-LogMsg "Test file is created on /mnt/data and Waiting for Active pages update."
-sleep 300
+LogMsg "Waiting for Clear Allocated memory by TRIM."
+sleep 600
 ls -l
 df -hT | grep /mnt/data
-LogMsg "Calculate Active pages on TRIM test once test file is created."
 #
 # Let ICA know we completed successfully
 #

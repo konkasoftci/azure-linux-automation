@@ -7632,7 +7632,7 @@
 			<testScriptps1>ICA-TRIM-TEST.ps1</testScriptps1>
 			<setupType>Trim-OP0</setupType>
 			<diskType>None</diskType>
-			<files>.\remote-scripts\auto_rdos_XStoreTrim_setup.sh,.\remote-scripts\auto_rdos_XStoreTrim.sh</files>
+			<files>.\remote-scripts\auto_rdos_XStoreTrim_setup.sh,.\remote-scripts\auto_rdos_XStoreTrim.sh,.\remote-scripts\auto_rdos_XStoreTrimFinal.sh</files>
 			<SupportedExecutionModes>AzureServiceManagement,AzureResourceManager</SupportedExecutionModes>
 			<SubtestValues>TestID1,TestID2,TestID3,TestID4,TestID5</SubtestValues>
 			<TestParameters>
@@ -7646,7 +7646,7 @@
 			<testScriptps1>ICA-TRIM-TEST.ps1</testScriptps1>
 			<setupType>Trim-OP1</setupType>
 			<diskType>ReadOnly</diskType>
-			<files>auto_rdos_XStoreTrim_setup.sh,auto_rdos_XStoreTrim.sh</files>
+			<files>.\remote-scripts\auto_rdos_XStoreTrim_setup.sh,.\remote-scripts\auto_rdos_XStoreTrim.sh,.\remote-scripts\auto_rdos_XStoreTrimFinal.sh</files>
 			<SupportedExecutionModes>AzureServiceManagement,AzureResourceManager</SupportedExecutionModes>
 			<SubtestValues>TestID1,TestID2,TestID3,TestID4,TestID5</SubtestValues>
 			<TestParameters>
@@ -7660,7 +7660,7 @@
 			<testScriptps1>ICA-TRIM-TEST.ps1</testScriptps1>
 			<setupType>Trim-OP2</setupType>
 			<diskType>ReadWrite</diskType>
-			<files>auto_rdos_XStoreTrim_setup.sh,auto_rdos_XStoreTrim.sh</files>
+			<files>.\remote-scripts\auto_rdos_XStoreTrim_setup.sh,.\remote-scripts\auto_rdos_XStoreTrim.sh,.\remote-scripts\auto_rdos_XStoreTrimFinal.sh</files>
 			<SupportedExecutionModes>AzureServiceManagement,AzureResourceManager</SupportedExecutionModes>
 			<SubtestValues>TestID1,TestID2,TestID3,TestID4,TestID5</SubtestValues>
 			<TestParameters>
