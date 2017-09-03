@@ -51,7 +51,7 @@ Function TrimSetup($VMObject, $PrevTestStatus, $metaData, $trimParam, $ISAbortIg
 	if ( $PrevTestStatus -eq "PASS" )
     {	
 		LogMsg "STARTING TEST : $trimParam : $metaData"
-		$BasicInfoCmds = "date^last^uname -r^uname -a^cat /etc/*-release^df -hT^fdisk -l^cat /etc/fstab^hostname^python -V^waagent --version"
+		$BasicInfoCmds = "date^last^uname -r^uname -a^dmesg | grep -i 'Host Build'^cat /etc/*-release^df -hT^fdisk -l^cat /etc/fstab^hostname^python -V^waagent --version"
 		$BasicInfoCmds = ($BasicInfoCmds).Split("^")
 		Set-Content -Value "**************$BasicInfoCmd $metaData******************" -Path "$($VMObject.logDir)\basic_VM_info_status.txt"
 		foreach($BasicInfoCmd in $BasicInfoCmds)
@@ -97,7 +97,7 @@ Function TrimTest($VMObject, $PrevTestStatus, $metaData, $trimParam, $ISAbortIgn
 	if ( $PrevTestStatus -eq "PASS" )
     {	
 		LogMsg "STARTING TEST : $trimParam : $metaData"
-		$BasicInfoCmds = "date^last^uname -r^uname -a^cat /etc/*-release^df -hT^fdisk -l^cat /etc/fstab^hostname^python -V^waagent --version"
+		$BasicInfoCmds = "date^last^uname -r^uname -a^dmesg | grep -i 'Host Build'^cat /etc/*-release^df -hT^fdisk -l^cat /etc/fstab^hostname^python -V^waagent --version"
 		$BasicInfoCmds = ($BasicInfoCmds).Split("^")
 		Set-Content -Value "**************$BasicInfoCmd $metaData******************" -Path "$($VMObject.logDir)\basic_VM_info_status.txt"
 		foreach($BasicInfoCmd in $BasicInfoCmds)
