@@ -266,7 +266,7 @@ Import-Module .\TestLibs\RDFELibs.psm1 -Force
 $Subtests = $currentTestData.SubtestValues
 $SubtestValues = $Subtests.Split(",") 
 $StorageAccountName = $xmlConfig.config.Azure.General.ARMStorageAccount
-$StoragePrimaryKey = (Get-AzureRmStorageAccount | Where { $_.StorageAccountName -eq $StorageAccountName } | Get-AzureRmStorageAccountKey)[0].Value
+$StoragePrimaryKey = $null
 $diskType = $currentTestData.diskType
 $ActivePageValueBeforeTrim = ""
 $ActivePageValueAfterTrim = ""
@@ -289,6 +289,16 @@ if($isDeployed)
 	$hs1vm1Dip = $AllVMData.InternalIP
 	$instanceSize = $allVMData.InstanceSize
 	$vhdUrl = (Get-AzureRmVM -ResourceGroupName $allVMData.ResourceGroupName).StorageProfile.DataDisks[0].Vhd.Uri
+	
+	$retryCount = 0
+	$maxRetryCount = 999
+	while(!$StoragePrimaryKey -and ($retryCount -lt $maxRetryCount))
+	{
+		$retryCount += 1
+		LogMsg "[Attempt $retryCount/$maxRetryCount] : Getting Existing Storage Account : $StorageAccountName details ..."
+		$StoragePrimaryKey = $(Get-AzureRmStorageAccount | Where { $_.StorageAccountName -eq $StorageAccountName } | Get-AzureRmStorageAccountKey)[0].Value
+		WaitFor -seconds 20
+	}
 	
 	$VMObject = CreateTestVMNode -ServiceName $isDeployed -VIP $hs1VIP -SSHPort $hs1vm1sshport -username  $user -password $password -DNSUrl $hs1ServiceUrl -logDir $LogDir
 	$DetectedDistro = DetectLinuxDistro -VIP $hs1VIP -SSHport $hs1vm1sshport -testVMUser  $user -testVMPassword $password
