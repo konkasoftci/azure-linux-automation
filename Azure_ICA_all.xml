@@ -2947,6 +2947,69 @@
 					</VirtualMachine>
 				</HostedService>
 			</A11>
+			<Trim-OP0>
+				<isDeployed>NO</isDeployed>
+				<HostedService>
+					<VirtualMachine>
+						<state></state>
+						<InstanceSize>Large</InstanceSize>
+						<ARMInstanceSize>Standard_A3</ARMInstanceSize>
+						<EndPoints>
+							<Name>SSH</Name>
+							<Protocol>tcp</Protocol>
+							<LocalPort>22</LocalPort>
+							<PublicPort>22</PublicPort>
+						</EndPoints>
+						<DataDisk>
+							<LUN>0</LUN>
+							<DiskSizeInGB>80</DiskSizeInGB>
+							<HostCaching>None</HostCaching>
+						</DataDisk>
+					</VirtualMachine>
+				</HostedService>
+			</Trim-OP0>
+			<Trim-OP1>
+				<isDeployed>NO</isDeployed>
+				<HostedService>
+					<VirtualMachine>
+						<state></state>
+						<InstanceSize>Large</InstanceSize>
+						<ARMInstanceSize>Standard_A3</ARMInstanceSize>
+						<EndPoints>
+							<Name>SSH</Name>
+							<Protocol>tcp</Protocol>
+							<LocalPort>22</LocalPort>
+							<PublicPort>22</PublicPort>
+						</EndPoints>
+						<DataDisk>
+							<LUN>0</LUN>
+							<DiskSizeInGB>80</DiskSizeInGB>
+							<HostCaching>ReadOnly</HostCaching>
+						</DataDisk>
+					</VirtualMachine>
+				</HostedService>
+			</Trim-OP1>
+			<Trim-OP2>
+				<isDeployed>NO</isDeployed>
+				<HostedService>
+					<VirtualMachine>
+						<state></state>
+						<InstanceSize>Large</InstanceSize>
+						<ARMInstanceSize>Standard_A3</ARMInstanceSize>
+						<EndPoints>
+							<Name>SSH</Name>
+							<Protocol>tcp</Protocol>
+							<LocalPort>22</LocalPort>
+							<PublicPort>22</PublicPort>
+						</EndPoints>
+						<DataDisk>
+							<LUN>0</LUN>
+							<DiskSizeInGB>80</DiskSizeInGB>
+							<HostCaching>ReadWrite</HostCaching>
+						</DataDisk>
+					</VirtualMachine>
+				</HostedService>
+			</Trim-OP2>			
 			<DS2DISK2>
 				<isDeployed>NO</isDeployed>
 				<HostedService>
@@ -7561,7 +7624,50 @@
 				<param></param>
 			</TestParameters>
 			<Priority>P0</Priority>
-		</test>			
+		</test>
+		<!-- TRIM Test Definations -->
+		<test>
+			<testName>ICA-TRIM-OPTION-0-TEST</testName>
+			<testScript></testScript>
+			<testScriptps1>ICA-TRIM-TEST.ps1</testScriptps1>
+			<setupType>Trim-OP0</setupType>
+			<diskType>None</diskType>
+			<files>.\remote-scripts\auto_rdos_XStoreTrim_setup.sh,.\remote-scripts\auto_rdos_XStoreTrim.sh,.\remote-scripts\auto_rdos_XStoreTrimFinal.sh</files>
+			<SupportedExecutionModes>AzureServiceManagement,AzureResourceManager</SupportedExecutionModes>
+			<SubtestValues>TestID1,TestID2,TestID3,TestID4,TestID5</SubtestValues>
+			<TestParameters>
+				<param>trimParam="BTRFS","XFS","EXT4"</param>
+			</TestParameters>
+			<Priority>P0</Priority>
+		</test>	
+		<test>
+			<testName>ICA-TRIM-OPTION-1-TEST</testName>
+			<testScript></testScript>
+			<testScriptps1>ICA-TRIM-TEST.ps1</testScriptps1>
+			<setupType>Trim-OP1</setupType>
+			<diskType>ReadOnly</diskType>
+			<files>.\remote-scripts\auto_rdos_XStoreTrim_setup.sh,.\remote-scripts\auto_rdos_XStoreTrim.sh,.\remote-scripts\auto_rdos_XStoreTrimFinal.sh</files>
+			<SupportedExecutionModes>AzureServiceManagement,AzureResourceManager</SupportedExecutionModes>
+			<SubtestValues>TestID1,TestID2,TestID3,TestID4,TestID5</SubtestValues>
+			<TestParameters>
+				<param>trimParam="BTRFS","XFS","EXT4"</param>
+			</TestParameters>
+			<Priority>P0</Priority>
+		</test>	
+		<test>
+			<testName>ICA-TRIM-OPTION-2-TEST</testName>
+			<testScript></testScript>
+			<testScriptps1>ICA-TRIM-TEST.ps1</testScriptps1>
+			<setupType>Trim-OP2</setupType>
+			<diskType>ReadWrite</diskType>
+			<files>.\remote-scripts\auto_rdos_XStoreTrim_setup.sh,.\remote-scripts\auto_rdos_XStoreTrim.sh,.\remote-scripts\auto_rdos_XStoreTrimFinal.sh</files>
+			<SupportedExecutionModes>AzureServiceManagement,AzureResourceManager</SupportedExecutionModes>
+			<SubtestValues>TestID1,TestID2,TestID3,TestID4,TestID5</SubtestValues>
+			<TestParameters>
+				<param>trimParam="BTRFS","XFS","EXT4"</param>
+			</TestParameters>
+			<Priority>P0</Priority>
+		</test>					
 	</testsDefinition>
 
 	<testCycles>
@@ -8606,7 +8712,20 @@
 			<test>
 				<Name>ICA-LIS-BUILD-TEST-SCENARIO-8</Name>
 			</test>
-		</Cycle>		
+		</Cycle>
+		<!-- TRIM tests -->
+		<Cycle>
+			<cycleName>TRIM</cycleName>
+			<test>
+				<Name>ICA-TRIM-OPTION-0-TEST</Name>
+			</test>
+			<test>
+				<Name>ICA-TRIM-OPTION-1-TEST</Name>
+			</test>
+			<test>
+				<Name>ICA-TRIM-OPTION-2-TEST</Name>
+			</test>
+		</Cycle>			
 		<Cycle>
 			<cycleName>DEBUG</cycleName>
 			<!--You can add individual tests here and run them for debugging purpose. You can also add new cycles. -->
