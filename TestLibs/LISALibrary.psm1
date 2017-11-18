@@ -399,10 +399,12 @@ function EnableSRIOVInAllVMs($allVMData)
                     {
                         LogMsg "SRIOV workaround is not needed."
                     }
-		            LogMsg "Wait 120 sec for SRIOV updated status"
-					WaitFor -seconds 120
+					LogMsg "Wait 200 sec for SRIOV updated status"
+					WaitFor -seconds 200
 					LogMsg "Now executing $scriptName ..."
 		            $sriovOutput = RunLinuxCmd -ip $vmData.PublicIP -port $vmData.SSHPort -username $user -password $password -command "/home/$user/$scriptName" -runAsSudo
+					$sriovStatus = RunLinuxCmd -ip $vmData.PublicIP -port $vmData.SSHPort -username $user -password $password -command 'dmesg | grep -i "Data path" | tail -n 1' -runAsSudo
+					LogMsg "$($vmData.RoleName) : SRIOV Status : $sriovStatus ..."
                     $sriovDetectedCount += 1
                 }
                 else
@@ -433,7 +435,7 @@ function EnableSRIOVInAllVMs($allVMData)
 	            {
                     $vmCount += 1
                     if ($sriovOutput -imatch "DATAPATH_SWITCHED_TO_VF")
-                    {
+                    {                       
                         $AfterIfConfigStatus = $null
                         $AfterIfConfigStatus = RunLinuxCmd -ip $vmData.PublicIP -port $vmData.SSHPort -username $user -password $password -command "dmesg" -runAsSudo
                         if ($AfterIfConfigStatus -imatch "Data path switched to VF")
