@@ -434,6 +434,12 @@ function EnableSRIOVInAllVMs($allVMData)
 	            foreach ( $vmData in $allVMData )
 	            {
                     $vmCount += 1
+                    LogMsg "Wait 200 sec for SRIOV updated status"
+                    WaitFor -seconds 200
+                    LogMsg "Now executing $scriptName ..."
+                    $sriovOutput = RunLinuxCmd -ip $vmData.PublicIP -port $vmData.SSHPort -username $user -password $password -command "/home/$user/$scriptName" -runAsSudo
+                    $sriovStatus = RunLinuxCmd -ip $vmData.PublicIP -port $vmData.SSHPort -username $user -password $password -command 'dmesg | grep -i "Data path" | tail -n 1' -runAsSudo
+                    LogMsg "$($vmData.RoleName) : SRIOV Status : $sriovStatus ..."
                     if ($sriovOutput -imatch "DATAPATH_SWITCHED_TO_VF")
                     {                       
                         $AfterIfConfigStatus = $null
