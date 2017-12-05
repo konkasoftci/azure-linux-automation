@@ -189,8 +189,8 @@ elif [ $LinuxDistro == "UBUNTU" ]; then
 	export DEBIAN_FRONTEND=noninteractive
 	LogMsg "Updating distro..."
 	apt-get update
-	LogMsg "Installing packages git make tar gcc bc patch dos2unix wget ..."
-	apt-get install -y git make tar gcc bc patch dos2unix wget >> $logFolder/build-customKernel.txt 2>&1
+	LogMsg "Installing packages git make tar gcc bc patch dos2unix wget git-core sysstat libssl-dev libelf-dev ..."
+	apt-get install -y git make tar gcc bc patch dos2unix wget git-core sysstat libssl-dev libelf-dev >> $logFolder/build-customKernel.txt 2>&1
 	LogMsg "Installing kernel-package ..."
 	apt-get -o Dpkg::Options::="--force-confnew" -y install kernel-package >> $logFolder/build-customKernel.txt 2>&1
 	rm -rf linux-next
