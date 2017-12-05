@@ -399,12 +399,12 @@ function EnableSRIOVInAllVMs($allVMData)
                     {
                         LogMsg "SRIOV workaround is not needed."
                     }
-					LogMsg "Wait 200 sec for SRIOV updated status"
-					WaitFor -seconds 200
-					LogMsg "Now executing $scriptName ..."
-		            $sriovOutput = RunLinuxCmd -ip $vmData.PublicIP -port $vmData.SSHPort -username $user -password $password -command "/home/$user/$scriptName" -runAsSudo
-					$sriovStatus = RunLinuxCmd -ip $vmData.PublicIP -port $vmData.SSHPort -username $user -password $password -command 'dmesg | grep -i "Data path" | tail -n 1' -runAsSudo
-					LogMsg "$($vmData.RoleName) : SRIOV Status : $sriovStatus ..."
+                    LogMsg "Wait 200 sec for SRIOV updated status"
+                    WaitFor -seconds 200
+                    LogMsg "Now executing $scriptName ..."
+                    $sriovOutput = RunLinuxCmd -ip $vmData.PublicIP -port $vmData.SSHPort -username $user -password $password -command "/home/$user/$scriptName" -runAsSudo
+                    $sriovStatus = RunLinuxCmd -ip $vmData.PublicIP -port $vmData.SSHPort -username $user -password $password -command 'dmesg | grep -i "Data path" | tail -n 1' -runAsSudo
+                    LogMsg "$($vmData.RoleName) : SRIOV Status : $sriovStatus ..."
                     $sriovDetectedCount += 1
                 }
                 else
